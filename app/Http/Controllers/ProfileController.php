@@ -37,6 +37,13 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
+    public function profile_picture(Request $request): RedirectResponse
+    {
+        $request->user()->profile_picture = $request->file('profile_picture')->store('profile_pictures', 'public');
+        $request->user()->save();
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
     /**
      * Delete the user's account.
      */
