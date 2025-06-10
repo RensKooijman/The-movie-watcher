@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "../../node_modules/preline/variants.css";
+@source "../../node_modules/preline/dist/*.js";
+
+.logo-gradient {
+    background: #3D34C4;
+    background: linear-gradient(90deg,rgba(61, 52, 196, 1) 0%, rgba(179, 215, 46, 1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

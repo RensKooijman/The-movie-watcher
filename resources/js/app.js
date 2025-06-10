@@ -1,3 +1,4 @@
+import 'preline';
 import './bootstrap';
 
 import Alpine from 'alpinejs';
