@@ -10,28 +10,142 @@
         </h1>
     </x-slot>
     <div class="py-12" x-data="{ open: false }">
-        <div x-ref="alert" class="relative w-full overflow-hidden rounded-sm border border-green-500 bg-surface text-on-surface dark:bg-surface-dark dark:text-on-surface-dark" role="alert">
-            <div class="flex w-full items-center gap-2 bg-green-500/10 p-4">
-                <div class="bg-green-500/15 text-green-500 rounded-full p-1" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-6" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd"></path>
-                    </svg>
+        @if (Auth::check() && !session('alert_opened'))
+            <?php session(['alert_opened' => true]); ?>
+            <div x-ref="alert" class=" mb-3 relative w-full overflow-hidden rounded-sm border border-green-500 bg-surface text-on-surface dark:bg-surface-dark dark:text-on-surface-dark" role="alert">
+                <div class="flex w-full items-center gap-2 bg-green-500/10 p-4">
+                    <div class="bg-green-500/15 text-green-500 rounded-full p-1" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-6" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-2">
+                        <h2 class="text-sm font-semibold text-green-500">{{ __("You're logged in!") }}</h2>
+                    </div>
+                    <button class="ml-auto" aria-label="dismiss alert" @click="$refs.alert.remove()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" stroke="green" fill="none" stroke-width="2.5" class="size-4 shrink-0">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
-                <div class="ml-2">
-                    <h2 class="text-sm font-semibold text-green-500">{{ __("You're logged in!") }}</h2>
-                </div>
-                <button class="ml-auto" aria-label="dismiss alert" @click="$refs.alert.remove()">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="2.5" class="size-4 shrink-0">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
             </div>
-        </div>
+        @endif
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <!-- <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div> -->
+            <div class="flex flex-col md:flex-row justify-center items-stretch gap-8 w-full max-w-5xl mx-auto">
+                <!-- Table 1 -->
+                <div class="flex-1 bg-gray-100 dark:bg-gray-800 overflow-visible shadow-sm sm:rounded-lg w-auto max-w-fit">
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                        <h1 class="text-lg font-bold mb-4 text-center text-gray-700 dark:text-gray-200">
+                            Movies That Might Be Interesting
+                        </h1>
+                        <table class="max-w-full leading-normal bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
+                            <thead>
+                                <tr>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Cover
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Name
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Director
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Release Date
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Status
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Rating
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white dark:bg-gray-900">
+                                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <img class="w-16 h-24 object-cover rounded shadow" src="data:image/jpeg;base64,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" alt="Movie Cover" />
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <p class="text-gray-900 dark:text-gray-100 whitespace-no-wrap">Inception</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <p class="text-gray-900 dark:text-gray-100 whitespace-no-wrap">Christopher Nolan</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <p class="text-gray-900 dark:text-gray-100 whitespace-no-wrap">2010-07-16</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 dark:text-green-200 leading-tight">
+                                            <span aria-hidden class="absolute inset-0 bg-green-200 dark:bg-green-800 opacity-50 rounded-full"></span>
+                                            <span class="relative">Watched</span>
+                                        </span>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <span class="text-yellow-400">★★★★☆</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Table 2 (identical for demo) -->
+                <div class="flex-1 bg-gray-100 dark:bg-gray-800 overflow-visible shadow-sm sm:rounded-lg w-auto max-w-fit">
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                        <h1 class="text-lg font-bold mb-4 text-center text-gray-700 dark:text-gray-200">
+                            Currently watching
+                        </h1>
+                        <table class="max-w-full leading-normal bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
+                            <thead>
+                                <tr>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Cover
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Name
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Director
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Release Date
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Status
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                                        Rating
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white dark:bg-gray-900">
+                                    <td class="px-2 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <img style="height: 112.5px; width: 75px;" class="object-cover rounded shadow" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQAlAMBIgACEQEDEQH/xAAbAAACAwEBAQAAAAAAAAAAAAAEBQADBgIBB//EAD4QAAIBAwMCAwYCCAUDBQAAAAECAwAEEQUSIRMxBkFRFCJhcYGRMsEjQlJiobHR8AcVM8LhJXLxNFOCkrP/xAAZAQADAQEBAAAAAAAAAAAAAAABAgMEAAX/xAAqEQACAgEDAwMDBQEAAAAAAAAAAQIRIQMSMQRBYRMyUXGRoQUiUvDxFP/aAAwDAQACEQMRAD8A+daiZdT8R65f2sbdS0lmmLI2MIrYUj5VbpF9BbeDra3D75m1R5HjHcL01Vf91c+FnaHwz4sv2OCYIYQf3nkz/tNVy2ZhXQwW966txdMmPwjc4H325q8Msz6ipV2PsWnX6aja2V1p9qj2cy/pHbYDHgYII9QRzXz20nS01SC4Me4c7lHYnkDihIIFgm3G3hkWXzkH4T8/jR66bf3UQuba2k6RGYysR2r/AHzWiJjlfYZ3OsROu97eVHVSpVQmzd8s5/jWZ8QTi4vp5OkVMpBG9RuH28uO1aG2tNY1G1W4hZOnyqh1CkY47YNKtb0q9tVE100TSY2oAft5CuYaYw0nTYJdNt3eKP3kXuoz2rgaaxhuSbKMurHoIqglx5A8d6N0fRtcns7WSbUbCzspYGMW9N7jaCo42+o9fKmsnhHX4d3/AFyAbOd/sICds8t5Uu5FFGTPnV5Gwv1jmgEJEfvIBjDcjH8BXqRO00CIm4GSHOfLj+hP2pjqul3thqiLq8sE07xq4e3OVZTkqc4Geea5t42R43GCAYyQfXYSPpwaZCvkv8X6esFqk6u6ieRS6Hkbtvf4cUML2xWIQ9EBQgAfpE5P9+daQ+C9W1KIRT6z1juXcDASFcoD33fskUtuvDniDqzQW+mQXUUDmLrAom7b34ZwaCkmFxkhHqFzbS2ghiCkhwfeh27uMd/r2onTtOtX0I3ckSPLubJcZwM+lTVdD1mzszPe6YttboclxIhx9Ax9ad6b4ev47R7e7ZTbwxGR1iBLKSMgHtn+OMV1xWWLUnhA3g7S4E1yK7eJo2EiJD+ydxAZl+XIyPUjyq+3VoPE/I/0tdRe/wCrJGUzRdneCS6014EURQ27RoQMbtpYg/PLY55qjXpBH4j1d4h7sN7ZTfQykfmKhKVuzTBYoz2oJ1NS8X2JBDCHqZx/7co/JqH8eJcz2uhX0iqUn0+MqyqQM4XOSeM5P0p1qkAT/E3XbPyu7SVf/tAr1mdc1SK78PaHa7JBNaQumWbKsC3kB2486nJlIIzs0SRzOiPvVWIDbcZHyqVwysuM5GRkfKvaUqMnS5t9JkaFpha3MoV8AhXK8gH4jP8AGtDezwXGsaYtu++K202GHOCOVQZ4P7xas/ayvaRR9OTf7WDG8QY4I45I7HvgfEE+QpwlvGdSnkhk3xDCq3bI7/nVYckNV0h5DJFKrRMQeMHkcfOtH4emkkt5bSJHN1FE4DCYIpViMPt8yCKxzWsZUbPckXlHTgg1Za39yqrcQt07yHKn7YI+RHNWsy1g3NuskWjx6deWs0m8lpHSRQYznj+tDXG7VOgro5ELNuaRFORxjPPOMHn406jcXVlPcRWhCRRqznftMefpznBrO+H1uHluXuZUki3bV2KQoYdwCe4pkkK5N4HaXFxFaw2A0yylEKMIWW6dN+TycKMDue5/4IfUtZkeX/oVg/WG1lOoSYIxjtjA4q64tkhvFjaD2ZsAGMSZ8u+flSrUNTRYZ7NWuY3VGiEoAypxjIO/NLSHUpcGc8QXM91riSXdnBbMIVVYoH3oFGRnJA/sUOjQ2oS6lLSxRdJnjHBYbMnH8vrXTbjNF+kllZQV3y9z8O59fWvDCZDGqj3jsA9MFefypuwt5s31n4p0a1mk2NdENKJNqWzsE/RqNu7HOMUotrz2vX5LyCR4YJ5GIaWEgqvJxj4kHv61faNbWOlpEZ1DK0m0AkMxznzx5nGfiKvN5B1kzNblPd3N7UPPue/lx96SMaKzm5Ki3Ure21C2Nq8vUUvl1PYgEE/E8fwr3xDpkd1b3VtG7hjb9QKvGcRjGccng9qs0qG2luiouoZZCrkAMCR7vlihtdS5XUL0xQmQy20cUASTaeEbJJweB3+OKhq+5Itpe1sQXK2lnPokUL/oo55osE8nNxEVB+gehPF6ND4l8QKBjfo9vdj/AODxE/7q4t7CaLR7a8vgz3DXMqqJCCVC2pmQg4/aBpj43iZvGKR4yL/w5PCp/eCTEf8A5r96C4G7i7xay2n+KmkXMnux3NrFk477ldPyFZB9Mhk8NztHbhri1unDMDgiPI9O595flz8Kd/4hXRuB4V1MEhvYYmz55G0/nWWk166it7y1gIjgu2DyIVy2doyQfLNBhXg5soDJaoOtcIVypWOEMAc+pYete0peQhyBtXB8qlAoGQ8XtkuVGxhhiMgnOeaZrcixt2kZQy9bb7vmAMZH2pfPbiPDgq6jjjuD8aPit0u7BUlyM+8CPWrJNcGebWLGsE6SRCSNtyNyCKqiONTjHYS4GfiD/T+VLnlk097SBSGAXDfvZYf1prp8ftepW3TIbpy+9z2wDnNOneCDjWexuumn+U3bmzmlJwFljJEecfrc48/P1pL4Rh39ctDDjrFV6IBIX9nj0z/GnVzJbjQJ0a6ueqW/9LEh2sOATnHfv5+Qpb4OjSJFM3VgzMpdzuOB+0AfTntVLyyaTSNPdYTUv0MU0W0ghZwQy4Gec8/8US9hZ3DF3tbcAud77zuLZHfIx270JI4n1UOJXlUk4klAycLwT9aXavod5qk8k9pAkyZK7uoFORxtwT3889u/yochWHSFj6fINSuWQt0mmfpqBwoBPahr2AiJQWaIfoj1BxtG2i7K3ns7qeKcsGSQq0echSM8ccfarZ0M3ShmRWicxhgwzzsOKZ4AnkR3g1KZd95aOoQuzbYdoGcFiePgPtTjRfCrarpsF57WIuoHO1oQcYdlHOfPGfrXlx4isZZ5liiuCXRtwbszHPxxj/mjdPjvNShhe0mW3ghjEbRmYphizMOw54Ipew7Qf4f0FtM8Qxt7T1DHE7jEOARtIOTu4700v5Vi11OsfcSy3/hLZPK4wO/DfGhdKsdTh1ESXNwGjAII6pIPBGBxzyaf3ihfEFgT72Ixn5Bxn+VZ9T3GnR9tHze0a91jT+pK3RthepGqjuXkVo8jPOPdI5pz4tZRrngy7496CWFx/wBylf8AfXuoXVtZ6Y1t1Fa4iurSQBQff6UrM2OPj/EChPEsQi0/wvfNuLG9CHd+ryOMfSgvJ0vBk/GSBvA2gTqP9MywD1G1iP8AbWN1uIQ6lPGqbU4KKGyAhAK4+hHFfTNcsobnwZb20rOka6xLHlVycMXPH1rNeLLCJ7Swl09UliFsEldlAZOlxwTjOAp94cH7Ur4HTzRhqlGJMyl+idiFiQpYDH3NSlHL4ZM3E7nkA4+FO7MARRqe4UVnLd8EpjBc80XLJMmoRtEWXsvHnV4OkQ1Y26DL1C+tW6emzj6n+gp34ftBa6tNPzIshLKAT7pJ8/hzQUNxFLqBt3jBeM5Rx5cZP5070Yh7wMkoAYYGP1+39KeKV2RlJpJGl1HUJo9Dey68aW4PUGByCc96r8FzSdCCdJkYpJuBm7IR5HHl2+9cauZLe2VjbBD0g4MjcOM/i/LFX6K6SWMUmYYycFRGeNvyxmm7CDzMsuts9xs3tuL7Pwk4xx/flTTQo/aLC/EFxG8gklMMiA5X3vXzHelltFhwTg+55d+/f86s8MXAspPZok2wyrNKzkDAdj5D5/nSy4Gh7rFdxHs1CVbhVkmDkuyfrE7j+dQW8ciK4XGOnxk8+7VmS9/LLcM25mLAAY28Nx9+atlb9Ay2q/pumnT3DIJ28Zp7wIuQ5zYDepliYbOmU2qu3jBPA796Q6dHpb2kYmleACVsK+1t2VGe4Nal9MjjtIisCSznHVDNgEkc459R/Gs1dxwaRp19h45XD4UIAxTvxnnn+lIuCkuwtvtWg0/UIY9HkDyq3Ek8a4BwfIAZ7nuRS3VNav49YivxJc5ktzGhTgsCeNoP4fnSRJVfWLaWZiSsvJGBn0/v6Ux1eSF9O0qSYSh1iYRvAM78MMp/H5+fnipzeR4ZQttJNUiXUZIOv1Ej6kqe8BtyM5J7+X9mmk/i06hHpemX9mcQ3HtHvEjadnHbv2z+fpbc2L6lFqt810sVx1XL26qPdVQnJb0wx5GMkfGsY2/oxXUUdxG0JG4mMMjt5kt3xxjGMD15qV5LKNpn1LxpfTHwlCz2oglZ1uQTzja4GcH1zWKvdduNWEUNnCkFxbfot5I/S7gT6YAwpAAHYCnpX/MvDPiW7jd5AsaTp1MkqjQo2Bk8AFePSsv4etpHnjvWik9nW5tffZcI2WKEZ9cPmm3YOUWnbMvJI/UfcMMWJOUUH7YqUz1GOCHUbuKWNFaOd15+DGpR2h3+BbbDMqD45p1bgGXefnSSzbEwLZ4FO4GXIycfOq6fBn6i7OtNHU1SY8cq+D/D861vhC1htfaUuXUlVVgwOOPMj++azcBiiLToF/CcsD3H9ii9F8Tx2U7usLlpAFBBGRg5/nj7Vz4AnuYf4omu3vnRLsy2vSACr+HzOPpkU+8MKzaHbs0YlcMwXcMkDcaTSvb3m65OVEkmQu4jYpUEDHzyPjtppYz9C0jhhAKB+5bkZ5/Oni8E5LJr0LKoKgKQByPIedTRVZpo3KuHMLDa3ru4/lS4X0sUIJQAOu3KnPl6VbooniuJJWkd+jEB7y8nknIA+dLLgaGGVCOX2mcXA/So7hzuzk85okxOkZlwNsaxsR2JA7ird7vcTy7VyS/O3uaMQM6sfMLGePLFG8ArIttupfRe0PprR5lLEmQZI4+HFKNXKWkF5FIyxTvIHCHBBXPY+nHOa2EYPX6RZViUAupXO4ZJP8qw/iyGSTVGkMkY6p91cDAA7AgfKkTt0POLSMjeSrd3y27DasjoqkKuc5AwDwPiPl3715qcr6alpp8Wx4ihkGx9wVnAz/2kY7fEUKY/aLnDIEMkm2OEvwBk5+I8scevpTHWNJ1C0tLbUFeNYVZmjKtl0wSPTBxt+Vc6sMMI9sL62v8ATNdluIY7WLpTvFG25l6hAKqrccg7QoPbI+tGoxR3nhd/ZrVWWBEC3byZJO/LCNWfOBuAbapOR6CvND0Jb2xvC97tAlgDRq2BIXzlSD+t6fKjxo8sngSC/Opu1svU6Vkq4WKQFt35n61NpWXcmlhG58KwaJfeDtVuLaUi4v8AT9ktoWH6HpqYxgDsDtzz61nf8J757jQr2DXobi702BYRaJEu8owdsnaOeCQckcd6R+GtUtfDumG+jtL2eW6Vo7jYmYxtYgDPl7rfeslpmv3ujLdw2DGKK5KiROxO0kqCRg8ZNTceUUTtDjxPHbyeI9TZtxHtUm0j03GvKz8+r3lxPJPK6tJI25jsHJqVZTiQ9OfyDQsEkG6j3vI+gygsGIwOKXMhBUc5Iz2q9I92N1CLdDzjF5Z3YzvFuQthTzgjij7iyntJYHuIul1FDryMEHny7UNFbhuFBJPkBW21Gyt5tEt4YDLcXVqE3Tbs79wAKAeSgDv3yKok+CU5RuxLDet0wi7NsZBB8zgenpzTnTwDNGrSL1mI2xnjeTwB98UsttMdpVh2ssnBII/CPWnF9BFGZbr3GSKEtgHIG0Z7/enrBn3WzV2z28tnEqyJGJtwQy5QAqcEE/8AH9a4E1xbANHc7Pe5OfdPyNZPSJry88Qppomxb9I4QsCEXbndjPrj79q29loEqxhBdRlA4PvKefr5UO2RmqdId6K6XEBVzGs7Z2jPf5Yofw3qPtNlqM1zNFOYJ+jtjK7kA7Bu33xXniSWbR/C95fi5YTW1u3TX2l5AXI255HB5OPXPwr5TFe2Wn3mmppLPBHhBeNuz1CGG4n4fi+mKmluZb2xWD6zFHMLj2yJncXG4srvsCgfhIz386r1bT4Jbeaea2GYoTIwI3BsMOyjtkehz+QPiPU30mG5CRzsLZTskkjO18YIOe2M8f8AilXhy+Gpi8jvRaS7Y1KmT3ACRx3B5Bz5+ZPnQqjrM5c29tdzzPZWEku2RzHBgbgqndkn7DOT386Z3XV1PwlDHbRKi27yjM8wQMuTtAz6AeXnmipvDsjNMgWzOwZRfaVOcDyxn8qzNlBd67azWcUKySR/pjhkjOPwnuR6jj4CmavKYqk1ho7trKz07WVktJ+nby2uDJdLu2SFA2QAfQNjnPfsKVf55B/kzaUl7dyWyu7qiwxwg5zuycuxznHOBgUFr2svftZwWq+7CAYhHnILYwAPPjGPrUttKdrFLoiVutGc/omPOcHn5g1Pa3KkVctsbYpa+cJ0llnMY/CrSE4/KhJcs24925pi2ngIwk3LKxygPAxuwc+eeDxx2qxtCvntJLxIVNtBtErmZF2buBkFsjJ9RQ2vuUUoiepVhhb936ODXtCmNYy0yO3KnrlAc9iMn+FNkihGNkDt80C/zoKGVl7tj5DFEpdIv4nJNbIRpUedqybdpBoTEeFt0AbjO4ZFFaPfI9tNajeksQwTjk4I+n/ilovlONq5IOQTVMLkXEx3f6p3e6fqaZrJOLe1po0oubaNt0p3Pjk5ya81O7S602aFF2ApnPrjnH1xSm2iMgLhkRF7yO3A/M/SrpHhj3bWcx47lcFvpVKVEU5JonhJ5LW8illXb1IurF7owRkqa3H+fLFxkHyUY7V85s5jHBZ4xviJVhjB2nPr9PtTO2uBKNwO6kSVF9ST3WNPHus3d5oj28eemJYzcyADG3yHf1we3pWStIGuLqOJMsSAowPUgZ/nWnv2NxpVxbKoLyxFR8Tisx4SuW9vmZ2JZYhjPzqNU/qXi7hfwfT73WxFFLC2Gi2kL549O9ZzwyRatLDPOsjyRJL1CMctnK8ehB+9UX8vUjJ9aSRyzW0u/du/RBD9Cf61VwSyZlqtxas2M9xHg8KT27UjjCRzXkkUuxnUoDj8Ix24+Q+dBR6nhg21WI/VccH+/hVMkwAzH+sSzg/PyPpRcU+ARnJGXtYRLdiGRX3FtgRcAhu3n5Ctc1zNHbR25tERIlABEY8vkf41mo5Vg1bLAg9ZmB+Y/rTWW8LAgknPxqGklk19RJ4oOtr62CZubOIyF9yu2SRg9goIA4oh/Eix2t1ZLYaeYboKJDOsm19pyOQc8H0pDJJE7B3Ubh5+dCTxpKiqJDhScZ5708m0sCQjGTthFxLphk9zRo0Hot4xH0yalJmhZWxkH6V5Urf8TZt8nftDt3Y1fFIPM0KiNI2EUk/Cu5AI8YkDN57ew+tMp0c4Jh4mAGRXKzuGLK4OfI0vEhoiGOeSCSaNC0ceN7AfhpnNdxVo3wHx3jD8S4+vFEC8yBjjFKzHcLbLctE3QY4EmOM11JFPA6rMpQuoZQfMH0orVXZiT6R8tDZZ1cc8irYy6ktHwfgaCWzvo4uqbeQJjzXsPU0RZw3M6q0aOVzgsoziu9WPNiPotW9u139BhDfPtKyjOKXSmGz8R35tuIh5Y7E4J/jmilt4vaDBK8pkKk7VXawqu906xh3ySe0ws2TnJwx+ePXFTlNOSyNDp9SMZNxdfQK9s6keMihJZcAjNeXWlPHETZpcuxIwG9MDNLC910pZTE3TiO2Q+SnOKqtZMR9BqRy0wp5RnyNcC4xjBxiqbaG7vc+zwO4BwSBwKpmWaOboyROkhIAVhg13qK6sp/yT2qTjg5vZOpeK6jcQAT5eddpcCV9iYz+8cD71JLS6a59lNs/Wxnp45+dAvgEqRgg4IJ7VFSptplnotKpLgKmleNip3IR3BGKGaZj510lzhBHIoljHYMeR8jUaJHBaB9w80bhh/WueocopFfUz51KqqUnqMbai15yw2qNi/srVRNQURFZXM0Ykigd0PmBU7YQfNPdII/yHVMkdl86Wrpl4SB7PIPiRgUQdE1FVOYcAd/eFCSbVFdHWWlLd4a+6ocWN3bwaDax3YDW80jJIPNRzz61zq8sEOt6c0jgwxxpkgg8Annj70Fa22r6Yrz26qgADEkI34SGHBz5gfOr5Rrs8IWQJs904CIp93kc4z50i0s2apfqLcFClivwEX9tfGa4uUu09nYFsmcAMvoB5f3zV2k7ZNIAVBKesTsWbpnGO+c/H+NK5brWJY9s8RIVhJnoKDkHOcgZNH6de6lNcMt1lIpA7bhAo945P7PxNP6cnHbYF1sY6r1FHlPvfJ7Y5i15VfCcEhWl34GPXNV3l9AbWWztzK5J3s0zZwcdh9qdIs8UjMk7jJLHMaHDbiR3HqWoTogWns7yMIACAu0ZwWGMnGfIedGWn+5Nmd/qDWm4QVJt/n/BXb3Eh8OTN12Li6ADF+cbR8c+tcWkoOgX+5lJ6keBn94U3vxqM9nPCboyqynCvBHluQw97Ge4FCG/8SFpJdsAbksfZ4ueVP7P7qfb4nJUa+4V1l0/iLj/fuVxiS80W3h06cLJGx6qb9pJOec+dV6zIhudNgeZJbqLAlcHzyMDP3qy0uPEECZtjEqvvcHpRH8ZBPJHqB8vKuTd+IZbfoBojGB0vciiB4XbgkDPbikcHZV9ctm2vhc4x4G63Vtca08Uu1bi3/wBJ/wBpSORmsNc/60p/fP8AOjZNHv4kaRosKvc7hxzivToeoA7TBznH4hQhp7Gd1XXPqIpSXdsWZqZpidEvwcGHn/uFA3ED28zRSjDr3GfrT5MVpnGaleVKASUVBf3cMfThuHRB2CnFSpXHGn8PSPc2TSXDtI/UIyx8gKZMAW2nOC3IzUqVaPBmn7iLGrT9M52bwNueMVSnvezqScPGSwz34Fe1KLAj2UD2B25zsHmfj/Su0jG0HJ/E3GfgalSiFHjtm5jA4HUYEZPIAarBEuShyVBwAT8alSlFZSie8zFnO4sNpY4GPhXZUNLg5xsHGalSuCB6XIZ1ZGUBYpTGgXjAxRnTSIyhFwA2cZ8zyalSijpAdhO1yZ1lCkRSlR8cds0Qy74ISWYHK+8GIP4SalSheBu5kZ9RvRK4F1LhWIHvfGgpJHlcvIxZj3JqVKkXSOKlSpQCf//Z" alt="Movie Cover" />
+                                    </td>
+                                    <td class="px-2 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <p class="text-gray-900 dark:text-gray-100 whitespace-no-wrap">Inception</p>
+                                    </td>
+                                    <td class="px-2 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <p class="text-gray-900 dark:text-gray-100 whitespace-no-wrap">Christopher Nolan</p>
+                                    </td>
+                                    <td class="px-2 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <p class="text-gray-900 dark:text-gray-100 whitespace-no-wrap">2010-07-16</p>
+                                    </td>
+                                    <td class="px-2 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 dark:text-green-200 leading-tight">
+                                            <span aria-hidden class="absolute inset-0 bg-green-200 dark:bg-green-800 opacity-50 rounded-full"></span>
+                                            <span class="relative">Watched</span>
+                                        </span>
+                                    </td>
+                                    <td class="px-2 py-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+                                        <span class="text-yellow-400">★★★★☆</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
