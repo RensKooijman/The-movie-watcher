@@ -1,5 +1,6 @@
 # The-movie-watcher
-this is a new project this wil take inspiration from the famous imdb andimprove it on all fronts and make it more user based instead of movie based this repo might use an imdb API/ disney+ API/Netflix API
+this is a new project this wil take inspiration from the famous imdb andimprove it on all fronts and make it more user based instead of movie based this repo might use an imdb API/ disney+ API/Netflix API.
+I hope you wil enjoy this small project of mine.
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
